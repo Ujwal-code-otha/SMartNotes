@@ -161,9 +161,6 @@ const apkPath = path.resolve(__dirname, '../../app/build/outputs/apk/debug/app-d
 const capabilities = {
     platformName            : 'Android',
     'appium:automationName' : 'UiAutomator2',
-    'appium:udid'           : 'ZA222XNCRG',
-    'appium:deviceName'     : 'moto g85 5G',
-    'appium:platformVersion': '16',
     'appium:app'            : apkPath,
     'appium:appPackage'     : 'com.ai.smart.notes',
     'appium:appActivity'    : '.ui.MainActivity',
@@ -180,6 +177,24 @@ const capabilities = {
     'appium:skipUnlock'                     : true,
     'appium:allowTestPackages'              : true,
 };
+
+if (process.env.APPIUM_UDID) {
+    capabilities['appium:udid'] = process.env.APPIUM_UDID;
+} else if (!process.env.CI) {
+    capabilities['appium:udid'] = 'ZA222XNCRG';
+}
+
+if (process.env.APPIUM_DEVICE_NAME) {
+    capabilities['appium:deviceName'] = process.env.APPIUM_DEVICE_NAME;
+} else if (!process.env.CI) {
+    capabilities['appium:deviceName'] = 'moto g85 5G';
+}
+
+if (process.env.APPIUM_PLATFORM_VERSION) {
+    capabilities['appium:platformVersion'] = process.env.APPIUM_PLATFORM_VERSION;
+} else if (!process.env.CI) {
+    capabilities['appium:platformVersion'] = '16';
+}
 
 // FIX-1: Appium v3 uses path '/'
 const wdioOptions = { hostname: '127.0.0.1', port: 4723, path: '/', logLevel: 'warn', capabilities };

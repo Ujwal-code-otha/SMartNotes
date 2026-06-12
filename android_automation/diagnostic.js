@@ -8,20 +8,35 @@ const apkPath = path.resolve(__dirname, '../app/build/outputs/apk/debug/app-debu
 (async () => {
     const driver = await remote({
         hostname: '127.0.0.1', port: 4723, path: '/', logLevel: 'error',
-        capabilities: {
-            platformName             : 'Android',
-            'appium:automationName' : 'UiAutomator2',
-            'appium:udid'           : 'ZA222XNCRG',
-            'appium:deviceName'     : 'moto g85 5G',
-            'appium:platformVersion': '16',
-            'appium:app'            : apkPath,
-            'appium:appPackage'     : 'com.ai.smart.notes',
-            'appium:appActivity'    : '.ui.MainActivity',
-            'appium:autoGrantPermissions': true,
-            'appium:noReset'        : false,
-            'appium:fullReset'      : false,
-            'appium:newCommandTimeout': 120,
-        }
+        capabilities: (() => {
+            const caps = {
+                platformName             : 'Android',
+                'appium:automationName' : 'UiAutomator2',
+                'appium:app'            : apkPath,
+                'appium:appPackage'     : 'com.ai.smart.notes',
+                'appium:appActivity'    : '.ui.MainActivity',
+                'appium:autoGrantPermissions': true,
+                'appium:noReset'        : false,
+                'appium:fullReset'      : false,
+                'appium:newCommandTimeout': 120,
+            };
+            if (process.env.APPIUM_UDID) {
+                caps['appium:udid'] = process.env.APPIUM_UDID;
+            } else if (!process.env.CI) {
+                caps['appium:udid'] = 'ZA222XNCRG';
+            }
+            if (process.env.APPIUM_DEVICE_NAME) {
+                caps['appium:deviceName'] = process.env.APPIUM_DEVICE_NAME;
+            } else if (!process.env.CI) {
+                caps['appium:deviceName'] = 'moto g85 5G';
+            }
+            if (process.env.APPIUM_PLATFORM_VERSION) {
+                caps['appium:platformVersion'] = process.env.APPIUM_PLATFORM_VERSION;
+            } else if (!process.env.CI) {
+                caps['appium:platformVersion'] = '16';
+            }
+            return caps;
+        })()
     });
 
     console.log('Session created. Waiting 6s for app to settle...');

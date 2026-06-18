@@ -1,4 +1,4 @@
-name: Load Test Suite
+name: Web Load Test Suite
 
 on:
   push:
@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  load-tests:
-    name: Run Performance Load Tests
+  web-load-tests:
+    name: Run Web Performance Load Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -29,10 +29,10 @@ jobs:
       - name: Run Performance Suite
         run: node load-test-scripts/run_perf_tests.js
 
-      - name: Upload Load Test Reports
+      - name: Upload Web Load Test Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: load-test-reports
+          name: web-load-test-reports
           path: load-test-scripts/load-test-reports/
           retention-days: 7

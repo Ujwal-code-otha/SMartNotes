@@ -57,3 +57,11 @@ jobs:
             selenium-automation/build/reports/
             selenium-automation/build/allure-results/
           retention-days: 7
+
+      - name: Upload Selenium Excel Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Selenium-Excel-Report
+          path: selenium-automation/build/reports/selenium/*.xlsx
+          retention-days: 7

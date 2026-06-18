@@ -161,3 +161,11 @@ jobs:
             appium-automation/build/allure-results/
             appium.log
           retention-days: 7
+
+      - name: Upload Appium Excel Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Appium-Excel-Report
+          path: appium-automation/build/reports/appium/*.xlsx
+          retention-days: 7

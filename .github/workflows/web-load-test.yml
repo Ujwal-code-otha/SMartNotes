@@ -36,3 +36,11 @@ jobs:
           name: web-load-test-reports
           path: load-test-scripts/load-test-reports/
           retention-days: 7
+
+      - name: Upload Web Load Excel Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Web-Load-Excel-Report
+          path: load-test-scripts/load-test-reports/*.xlsx
+          retention-days: 7

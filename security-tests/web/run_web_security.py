@@ -73,6 +73,30 @@ def run_web_security():
 </html>"""
     with open("security-reports/web-security-report.html", "w") as f:
         f.write(html_content)
+
+    # Save Excel report
+    try:
+        import openpyxl
+        from openpyxl.styles import Font, PatternFill
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Security Scan Results"
+        ws.append(["Test ID", "Name", "Category", "Result", "Severity", "Note", "Timestamp"])
+        
+        # Format header
+        header_font = Font(bold=True, color="FFFFFF")
+        header_fill = PatternFill(start_color="1E293B", end_color="1E293B", fill_type="solid")
+        for cell in ws[1]:
+            cell.font = header_font
+            cell.fill = header_fill
+            
+        for r in results:
+            ws.append([r["test_id"], r["name"], r["category"], "PASS" if r["passed"] else "FAIL", r["severity"], r["note"], r["timestamp"]])
+            
+        wb.save("security-reports/Web_Security_Report.xlsx")
+        print("Excel report generated successfully.")
+    except Exception as e:
+        print(f"Failed to generate Excel report: {e}")
         
     print(f"Web vulnerability scan completed successfully. 200 cases executed.")
 
